@@ -4,6 +4,7 @@ import it.asanesi.product_service.dto.ProductDTO;
 import it.asanesi.product_service.entity.ProductEntity;
 import it.asanesi.product_service.repository.ProductRepository;
 import it.asanesi.product_service.service.ProductService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;

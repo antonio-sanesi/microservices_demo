@@ -6,6 +6,7 @@ import it.asanesi.order_service.repository.OrderRepository;
 import it.asanesi.order_service.service.OrderService;
 import it.asanesi.order_service.dto.ProductDTO;
 import it.asanesi.order_service.client.ProductServiceClient;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -21,6 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
