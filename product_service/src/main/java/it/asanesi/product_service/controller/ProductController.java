@@ -14,7 +14,7 @@ public class ProductController {
 
     private final ProductService productService;
 
-    //crud methods with @GetMapping, @PostMapping, and so on
+
     @GetMapping
     public List<ProductDTO> getProducts() {
         return productService.getProducts();

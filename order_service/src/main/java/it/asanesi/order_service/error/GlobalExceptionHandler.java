@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, exc.getStatusCode());
     }
 
-    // Add a new exception handler for FeignException
+    // aggiungo un exception handler per FeignException
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<ErrorDto> handleException(FeignException exc) {
         ErrorDto error = new ErrorDto();

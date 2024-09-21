@@ -60,7 +60,6 @@ public class ProductServiceImpl implements ProductService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
         }
         productRepository.deleteById(id);
-
     }
 
     @Override
