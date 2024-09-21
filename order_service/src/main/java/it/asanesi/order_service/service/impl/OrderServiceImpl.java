@@ -45,44 +45,13 @@ public class OrderServiceImpl implements OrderService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid quantity for order");
         }
 
-        var productDTO = orderDTO.getProduct();
-
-        //ottengo il prodotto reale dal servizio di prodotti
-        ProductDTO productReal;
-        try {
-            productReal = productServiceClient.getProductById(productDTO.getId());
-            log.info("Fetched product details: {}", productReal);
-        } catch (Exception e) {
-            log.error("Error fetching product details for product ID: {}", productDTO.getId(), e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error communicating with product service");
-        }
-
-        if(productReal.getStock() < orderDTO.getQuantity()) {
-            log.error("Not enough stock for product ID: {}", productDTO.getId());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough stock for product");
-        }
-
-        //calcolo il prezzo totale dell'ordine
-        var calculatedPrice = productReal.getPrice().multiply(BigDecimal.valueOf(orderDTO.getQuantity()));
-
         //salvo l'ordine
-        var orderToSave = new OrderEntity();
-        orderToSave.setProductId(productDTO.getId());
-        orderToSave.setQuantity(orderDTO.getQuantity());
-        orderToSave.setPrice(calculatedPrice);
-
+        var orderToSave = modelMapper.map(orderDTO, OrderEntity.class);
         var orderSaved = orderRepository.save(orderToSave);
 
-        productServiceClient.updateStock(productDTO.getId(), -orderDTO.getQuantity());
+        productServiceClient.updateStock(orderDTO.getProduct().getId(), -orderDTO.getQuantity());
 
-        //creo l'oggetto di output per la risposta
-        var outputDTO = new OrderDTO();
-        outputDTO.setId(orderSaved.getId());
-        outputDTO.setProduct(productReal);
-        outputDTO.setQuantity(orderSaved.getQuantity());
-        outputDTO.setPrice(orderSaved.getPrice());
-
-        return outputDTO;
+        return modelMapper.map(orderSaved, OrderDTO.class);
     }
 
     @Override
